@@ -62,6 +62,8 @@ nav {
     color: #ff6b6b;
 }
 
+/* Language toggle removed */
+
 .dropdown {
     position: absolute;
     top: 100%;
@@ -343,6 +345,192 @@ main {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
+}
+
+.personalities {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 25px;
+}
+
+.personalities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.personality-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    border-left: 4px solid #4ecdc4;
+}
+
+.personality-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.personality-card h3 {
+    color: #ff6b6b;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.personality-card .years {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.personality-card p:last-child {
+    color: #555;
+    line-height: 1.6;
+}
+
+/* Updated styles for personalities.html */
+.personalities-section .personalities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+@media (max-width: 768px) {
+    .personalities-section .personalities-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .personalities-section .personalities-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .personalities-section .personalities-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 32px;
+    }
+}
+
+.personalities-section .personality-card {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    min-height: 200px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.personalities-section .personality-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--accent-color, #4ecdc4);
+}
+
+.personalities-section .personality-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--accent-color, #4ecdc4);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.personalities-section .personality-card:hover::after {
+    transform: scaleX(1);
+}
+
+.personalities-section .personality-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.personalities-section .personality-card h3 {
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Inter', 'SF Pro', 'Manrope', sans-serif;
+    margin: 1.5rem 1rem 0.5rem 1rem;
+    padding: 0;
+}
+
+.personalities-section .personality-card .years {
+    color: #666;
+    font-size: 14px;
+    font-style: italic;
+    margin: 0 0 1rem 1rem;
+    padding: 0;
+}
+
+.personalities-section .personality-card p {
+    color: #555;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0 1rem 1.5rem 1rem;
+    padding: 0;
+    overflow: visible;
+    display: block;
+    -webkit-line-clamp: none;
+}
+
+/* Artist-specific accent colors */
+.personality-card.picasso { --accent-color: #ff6b6b; }
+.personality-card.malevich { --accent-color: #000; }
+.personality-card.kandinsky { --accent-color: #4ecdc4; }
+.personality-card.duchamp { --accent-color: #45b7d1; }
+.personality-card.dali { --accent-color: #96ceb4; }
+.personality-card.tatlin { --accent-color: #ff6b6b; }
+.personality-card.lissitzky { --accent-color: #4ecdc4; }
+.personality-card.mondrian { --accent-color: #000; }
+.personality-card.chagall { --accent-color: #45b7d1; }
+.personality-card.breton { --accent-color: #96ceb4; }
+.personality-card.corbusier { --accent-color: #ff6b6b; }
+.personality-card.boccioni { --accent-color: #ff6b6b; }
+.personality-card.boccioni { --accent-color: #45b7d1; }
+
+.view-all-btn {
+    display: inline-block;
+    margin: 2rem auto 0;
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-align: center;
+}
+
+.view-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
 }
 
 .artwork {
@@ -675,28 +863,480 @@ footer {
     padding: 2rem;
 }
 
-@media (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2.5rem;
-    }
-    
-    .nav-menu {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    nav {
-        flex-direction: column;
-        padding: 1rem;
-    }
-    
+/* Mobile Menu Button (Hidden on Desktop) */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 10px;
+    background: none;
+    border: none;
+    z-index: 1001;
+}
+
+.menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 6px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -6px);
+}
+
+/* Base Mobile Styles */
+@media (max-width: 1024px) {
+    /* Tablet styles */
     .directions-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         height: auto;
     }
     
     .direction-card {
-        padding: 2rem;
+        min-height: 200px;
+    }
+    
+    .personalities-grid,
+    .personalities-section .personalities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .movement-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .recommendations-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    /* Header and Navigation */
+    .menu-toggle {
+        display: flex;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    
+    nav {
+        padding: 1rem;
+        position: relative;
+    }
+    
+    .logo {
+        font-size: 0.9rem;
+        max-width: 70%;
+        line-height: 1.2;
+    }
+    
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: linear-gradient(135deg, #1a1a1a, #333);
+        flex-direction: column;
+        padding: 80px 20px 20px;
+        gap: 0;
+        transition: right 0.3s ease;
+        overflow-y: auto;
+        box-shadow: -5px 0 25px rgba(0,0,0,0.5);
+    }
+    
+    .nav-menu.active {
+        right: 0;
+    }
+    
+    .nav-menu li {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .nav-menu a {
+        padding: 15px 10px;
+        font-size: 1rem;
+    }
+    
+    /* Dropdown menus on mobile */
+    .dropdown {
+        position: static;
+        background: rgba(0,0,0,0.3);
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        border-radius: 0;
+    }
+    
+    .nav-menu li:hover .dropdown,
+    .dropdown.active {
+        max-height: 500px;
+    }
+    
+    .dropdown a {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    /* Language toggle */
+    .lang-toggle {
+        margin: 15px 10px;
+        width: calc(100% - 20px);
+        text-align: center;
+    }
+    
+    /* Hero sections */
+    .hero,
+    .period-hero,
+    .personality-hero {
+        height: auto;
+        min-height: 100vh;
+        padding: 100px 20px 60px;
+    }
+    
+    .hero-content h1,
+    .period-hero-content h1,
+    .personality-hero h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+    
+    .hero-content p,
+    .period-hero-content p {
+        font-size: 1.1rem;
+    }
+    
+    /* About section */
+    .about-avant-garde {
+        padding: 3rem 1.5rem 1rem;
+    }
+    
+    .about-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    .about-content p {
+        font-size: 1rem;
+    }
+    
+    /* Directions grid */
+    .directions {
+        padding: 2rem 1rem;
+        margin: 1rem;
+    }
+    
+    .directions-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .direction-card {
+        min-height: 150px;
+        padding: 1.5rem;
+    }
+    
+    .direction-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .direction-card h3 {
+        font-size: 1.3rem;
+    }
+    
+    /* Section headings */
+    .movements h2,
+    .artists h2,
+    .gallery h2,
+    .directions h2,
+    .personalities h2,
+    .recommendations h2 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+    
+    /* Movement cards */
+    .movements,
+    .artists,
+    .gallery,
+    .directions,
+    .personalities,
+    .recommendations {
+        padding: 3rem 1rem;
+    }
+    
+    .movement-grid,
+    .gallery-grid,
+    .personalities-grid,
+    .personalities-section .personalities-grid,
+    .recommendations-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    /* Movement cards */
+    .movement-card {
+        padding: 1.5rem;
+    }
+    
+    .movement-card h3 {
+        font-size: 1.3rem;
+    }
+    
+    /* Artwork */
+    .artwork-placeholder {
         height: 200px;
+    }
+    
+    .artwork-placeholder h3 {
+        font-size: 1.1rem;
+    }
+    
+    .artwork-placeholder p {
+        font-size: 0.8rem;
+    }
+    
+    /* Personality cards */
+    .personality-card {
+        padding: 1.5rem;
+    }
+    
+    .personality-card h3 {
+        font-size: 1.2rem;
+    }
+    
+    /* Period detail */
+    .period-detail {
+        padding: 1.5rem;
+    }
+    
+    .period-info {
+        padding: 1.5rem;
+    }
+    
+    .period-info h2 {
+        font-size: 1.5rem;
+    }
+    
+    .period-info h3 {
+        font-size: 1.2rem;
+    }
+    
+    /* Period navigation */
+    .period-navigation {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+    
+    .nav-arrow {
+        width: 100%;
+        justify-content: center;
+        padding: 0.8rem 1.5rem;
+    }
+    
+    /* Back links */
+    .back-link {
+        margin: 1rem;
+        font-size: 1rem;
+    }
+    
+    /* Buttons */
+    .cta-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .view-all-btn {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    /* Period hero navigation arrows */
+    .hero-nav-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .hero-nav-arrow.left {
+        left: 3%;
+    }
+    
+    .hero-nav-arrow.right {
+        right: 3%;
+    }
+    
+    /* Recommendations */
+    .recommendations {
+        padding: 2rem 1rem;
+    }
+    
+    .recommendation-hero {
+        height: 150px;
+    }
+    
+    .recommendation-hero h3 {
+        font-size: 1.3rem;
+    }
+    
+    /* Article content */
+    #article-content,
+    .personality-detail {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+    
+    #article-content h2,
+    .personality-detail h2 {
+        font-size: 1.8rem;
+    }
+    
+    #article-content h3,
+    .personality-detail h3 {
+        font-size: 1.2rem;
+    }
+    
+    #article-content p,
+    .personality-detail p {
+        font-size: 0.95rem;
+    }
+    
+    #article-content ul,
+    .personality-detail ul {
+        padding-left: 1.5rem;
+    }
+    
+    /* Back to list button */
+    .back-to-list {
+        margin: 1rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+        width: calc(100% - 2rem);
+    }
+    
+    /* Footer */
+    footer {
+        padding: 1.5rem;
+    }
+    
+    footer p {
+        font-size: 0.9rem;
+    }
+    
+    /* Hide horizontal scroll */
+    body {
+        overflow-x: hidden;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small devices */
+    .logo {
+        font-size: 0.8rem;
+    }
+    
+    .hero-content h1,
+    .period-hero-content h1,
+    .personality-hero h1 {
+        font-size: 1.6rem;
+    }
+    
+    .hero-content p,
+    .period-hero-content p {
+        font-size: 1rem;
+    }
+    
+    .about-content h2,
+    .movements h2,
+    .gallery h2,
+    .directions h2,
+    .personalities h2,
+    .recommendations h2 {
+        font-size: 1.5rem;
+    }
+    
+    .direction-card h3 {
+        font-size: 1.1rem;
+    }
+    
+    .direction-card p {
+        font-size: 0.8rem;
+    }
+    
+    .movement-card h3 {
+        font-size: 1.1rem;
+    }
+    
+    .period-info h2 {
+        font-size: 1.3rem;
+    }
+    
+    .period-info h3 {
+        font-size: 1.1rem;
+    }
+    
+    #article-content h2,
+    .personality-detail h2 {
+        font-size: 1.5rem;
+    }
+    
+    #article-content h3,
+    .personality-detail h3 {
+        font-size: 1.1rem;
+    }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero,
+    .period-hero,
+    .personality-hero {
+        min-height: auto;
+        padding: 80px 20px 40px;
+    }
+    
+    .hero-content h1,
+    .period-hero-content h1,
+    .personality-hero h1 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Touch device improvements */
+@media (hover: none) {
+    .dropdown {
+        /* Allow tap to open on touch devices */
+    }
+    
+    .nav-menu a,
+    .dropdown a,
+    .movement-card,
+    .direction-card,
+    .personality-card,
+    .artwork {
+        -webkit-tap-highlight-color: transparent;
     }
 }

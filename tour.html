@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Витебский авангардный лабиринт Эля Лисицкого</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .tour-hero {
+            height: 60vh;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding-top: 80px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tour-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="none" stroke="white" stroke-width="0.5" x="10" y="10" width="30" height="30" transform="rotate(15 25 25)"/><rect fill="none" stroke="white" stroke-width="0.5" x="50" y="60" width="40" height="40" transform="rotate(-10 70 80)"/><circle fill="none" stroke="white" stroke-width="0.5" cx="70" cy="30" r="15"/><line x1="10" y1="80" x2="90" y2="20" stroke="white" stroke-width="0.3"/></svg>');
+            opacity: 0.15;
+            background-size: 200px 200px;
+        }
+
+        .tour-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .tour-hero p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 700px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tour-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .tour-progress-bar {
+            height: 100%;
+            background: white;
+            transition: width 0.5s ease;
+        }
+
+        .tour-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+
+        .tour-nav.prev { left: 20px; }
+        .tour-nav.next { right: 20px; }
+
+        .tour-nav button {
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tour-nav button:hover:not(:disabled) {
+            background: rgba(255,255,255,0.2);
+            border-color: white;
+            transform: scale(1.1);
+        }
+
+        .tour-nav button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .tour-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .tour-stop {
+            display: none;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .tour-stop.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tour-stop-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stop-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .tour-stop h2 {
+            color: #333;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .tour-stop-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .tour-stop-content p {
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .tour-stop-content h3 {
+            color: #ff6b6b;
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+        }
+
+        .tour-stop-content ul {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .tour-stop-content li {
+            line-height: 1.7;
+            margin-bottom: 0.8rem;
+            color: #555;
+        }
+
+        .artwork-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .artwork-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .artwork-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .artwork-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 3rem;
+        }
+
+        .artwork-image.dada {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .artwork-info {
+            padding: 1.5rem;
+        }
+
+        .artwork-info h4 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .artwork-info p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .tour-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .tour-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tour-dot.active {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            transform: scale(1.2);
+        }
+
+        .tour-dot:hover:not(.active) {
+            background: #bbb;
+        }
+
+        .tour-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .tour-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .tour-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .tour-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .tour-btn.secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .tour-btn.secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .intro-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .intro-card h3 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .intro-card p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .lissitzky-quote {
+            border-left: 4px solid #4ecdc4;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #555;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .proun-diagram {
+            background: #000;
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .proun-diagram h4 {
+            color: #4ecdc4;
+            margin-bottom: 1rem;
+        }
+
+        .proun-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .proun-shape {
+            width: 80px;
+            height: 80px;
+            border: 3px solid;
+            transform: rotate(45deg);
+        }
+
+        .proun-shape.red { border-color: #ff6b6b; }
+        .proun-shape.blue { border-color: #4ecdc4; }
+        .proun-shape.yellow { border-color: #ffe66d; }
+
+        .key-work {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .key-work h4 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .key-work p {
+            color: rgba(255,255,255,0.95);
+        }
+
+        .malevich-connection {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px solid #333;
+        }
+
+        .malevich-connection h4 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .heritage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .heritage-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .heritage-card h4 {
+            color: #ff6b6b;
+            margin-bottom: 0.5rem;
+        }
+
+        .heritage-card p {
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .tour-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .tour-hero p {
+                font-size: 1rem;
+            }
+            
+            .tour-nav {
+                display: none;
+            }
+            
+            .tour-stop-content {
+                padding: 1.5rem;
+            }
+            
+            .artwork-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Авангард: революция в искусстве и культуре</div>
+            <button class="menu-toggle" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Главная</a></li>
+                <li>
+                    <a href="index.html#history">История</a>
+                    <div class="dropdown">
+                        <a href="1900-1910.html">1900-1910</a>
+                        <a href="1910-1920.html">1910-1920</a>
+                        <a href="1920-1930.html">1920-1930</a>
+                        <a href="1930-1950.html">1930-1950</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="index.html#directions">Направления</a>
+                    <div class="dropdown">
+                        <a href="architecture.html">Архитектура</a>
+                        <a href="art.html">Искусство</a>
+                        <a href="literature.html">Литература</a>
+                        <a href="music.html">Музыка</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="index.html#movements">Течения</a>
+                    <div class="dropdown">
+                        <a href="fauvism.html">Фовизм</a>
+                        <a href="cubism.html">Кубизм</a>
+                        <a href="futurism.html">Футуризм</a>
+                        <a href="suprematism.html">Супрематизм</a>
+                        <a href="dadaism.html">Дадаизм</a>
+                        <a href="constructivism.html">Конструктивизм</a>
+                        <a href="surrealism.html">Сюрреализм</a>
+                        <a href="bauhaus.html">Баухаус</a>
+                        <a href="expressionism.html">Экспрессионизм</a>
+                    </div>
+                </li>
+                <li><a href="personalities.html">Личности</a></li>
+                <li><a href="tour.html" class="active">Экскурсия</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="tour-hero">
+        <h1>Витебский авангардный лабиринт Эля Лисицкого</h1>
+        <p>Интерактивное путешествие по следам великого авангардиста</p>
+        <div class="tour-progress">
+            <div class="tour-progress-bar" id="progressBar"></div>
+        </div>
+        <div class="tour-nav prev">
+            <button id="prevBtn" onclick="prevStop()">←</button>
+        </div>
+        <div class="tour-nav next">
+            <button id="nextBtn" onclick="nextStop()">→</button>
+        </div>
+    </section>
+
+    <main class="tour-content">
+        <!-- Stop 0: Introduction -->
+        <div class="tour-stop active" data-stop="0">
+            <div class="tour-stop-header">
+                <div class="stop-number">0</div>
+                <h2>Витебск — колыбель авангарда</h2>
+            </div>
+            <div class="tour-stop-content">
+                <div class="intro-card">
+                    <h3>Добро пожаловать в лабиринт!</h3>
+                    <p>Витебск — город на северо-востоке Беларуси — стал одним из важнейших центров русского авангарда в 1919-1924 годах. Здесь пересеклись пути величайших художников XX века: Казимира Малевича, Марка Шагала, Эля Лисицкого и многих других.</p>
+                </div>
+                
+                <h3>Об Эле Лисицком</h3>
+                <p>Эль (Лазарь) Лисицкий (1890-1941) — один из величайших художников, архитекторов и дизайнеров XX века, который навсегда изменил представление о пространстве, форме и дизайне. Родился 23 февраля 1890 года в местечке Почеп Орловской губернии в семье еврейского коммерсанта. В 1897 году семья переехала в Витебск — город, который станет важнейшей вехой в его творческой биографии.</p>
+
+                <p>Лисицкий получил образование в области архитектуры в Петрограде (1910-1914), где изучал классическую архитектуру и инженерное дело в Высшем художественном училище при Императорской Академии художеств. После окончания учебы он отправился в Европу, где познакомился с различными авангардными течениями — от кубизма и футуризма до дадаизма и конструктивизма.</p>
+
+                <p>После Октябрьской революции 1917 года Лисицкий вернулся в Витебск в 1919 году и стал одним из основателей Народного художественного училища — нового центра художественного образования. В это время Витебск стал настоящей Меккой авангарда. Лисицкий преподавал вместе с Казимиром Малевичем и Марком Шагалом, создавая уникальную творческую атмосферу.</p>
+
+                <p>В 1920-х годах Лисицкий активно работал в Германии, где сотрудничал с Баухаузом и участвовал в международных выставках. Он стал одним из основателей конструктивизма и разработал революционные принципы типографики и фотомонтажа. В 1930-х годах вернулся в СССР, где работал над архитектурными проектами и книжным дизайном.</p>
+
+                <p>Лисицкий умер 30 декабря 1941 года в Москве от туберкулёза. Его наследие продолжает влиять на современный дизайн, архитектуру и визуальные коммуникации.</p>
+                
+                <h3>Главное в искусстве Эля Лисицкого</h3>
+                <p>Искусство Лисицкого характеризуется несколькими ключевыми принципами, которые определили развитие современного дизайна:</p>
+                <ul>
+                    <li><strong>Пространство как конструкция</strong> — Лисицкий первым показал, что пространство можно «конструировать», создавая иллюзию глубины и движения на плоскости</li>
+                    <li><strong>Динамика и движение</strong> — в отличие от статичного супрематизма Малевича, Лисицкий стремился передать энергию и динамику современности</li>
+                    <li><strong>Практическое применение</strong> — искусство должно служить обществу: плакаты, книги, выставки, архитектура</li>
+                    <li><strong>Типографика</strong> — Лисицкий разработал революционную систему верстки с наклонными шрифтами и динамичной композицией</li>
+                    <li><strong>Фотомонтаж</strong> — техника создания изображений из нескольких фотографий, ставшая основой рекламы и визуальных коммуникаций</li>
+                    <li><strong>Пруны (Proun)</strong> — «Проекты утверждения нового» — экспериментальные работы, представляющие переход от плоскостной живописи к объёмно-пространственным конструкциям</li>
+                </ul>
+                
+                <p>В этом путешествии мы пройдём по следам Эля Лисицкого — художника, архитектора и дизайнера, который навсегда изменил представление о пространстве и форме. Его витебский период стал ключевым этапом в развитии мирового авангарда.</p>
+                
+                <p>Но прежде чем погрузиться в мир Лисицкого, нам нужно понять контекст — авангардные течения, которые его окружали и на которые он опирался.</p>
+                
+                <h3>Что такое авангард?</h3>
+                <p>Авангард — это радикальные художественные течения начала XX века, которые стремились к полному разрыву с традицией. Художники-авангардисты верили, что искусство должно не отражать реальность, а создавать новую.</p>
+            </div>
+        </div>
+
+        <!-- Stop 1: Dadaism -->
+        <div class="tour-stop" data-stop="1">
+            <div class="tour-stop-header">
+                <div class="stop-number">1</div>
+                <h2>Остановка 1: Дадаизм</h2>
+            </div>
+            <div class="tour-stop-content">
+                <div class="intro-card">
+                    <h3>Антиискусство как искусство</h3>
+                    <p>Дадаизм зародился в 1916 году в Цюрихе как реакция на ужасы Первой мировой войны. Это было время, когда старый мир рушился, и художники отказались от старых правил.</p>
+                </div>
+                
+                <h3>Ключевые черты дадаизма:</h3>
+                <ul>
+                    <li><strong>Антиискусство</strong> — отрицание традиционных художественных ценностей и канонов</li>
+                    <li><strong>Случайность</strong> — использование случайности как художественного метода</li>
+                    <li><strong>Абсурд</strong> — алогичность и бессмыслица как протест против рационального мира</li>
+                    <li><strong>Провокация</strong> — шокирование публики для разрушения условностей</li>
+                    <li><strong>Ready-made</strong> — превращение обычных предметов в произведения искусства</li>
+                </ul>
+                
+                <p>Дадаисты верили, что традиционное искусство — это ложь и лицемерие. Они выступали против разума, логики и буржуазной морали. Их девизом было слово «Dada» — бессмысленный слог, символизирующий отказ от смысла.</p>
+                
+                <h3>Ключевые работы:</h3>
+                <div class="artwork-showcase">
+                    <div class="artwork-card">
+                        <div class="artwork-image dada">
+                            <span>✻</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Тео ван Дусбург — Плакат</h4>
+                            <p>Основатель движения «Де Стейл» и один из ключевых фигур авангарда. Его работы сочетают элементы неопластицизма с дадаистской провокацией.</p>
+                        </div>
+                    </div>
+                    <div class="artwork-card">
+                        <div class="artwork-image dada">
+                            <span>◇</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Жан Арп — Коллаж по законам случая</h4>
+                            <p>Создавал коллажи, нарезая бумагу на произвольные формы и позволяя ей падать на пол — случайность определяла итоговую композицию.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p>Дадаизм стал важным источником вдохновения для Эля Лисицкого. Хотя сам Лисицкий работал в более «конструктивном» направлении, идеи случайности, провокации и переосмысления формы глубоко резонировали с его творчеством.</p>
+                
+                <div class="lissitzky-quote">
+                    «Искусство — не зеркало, отражающее реальность, а молот, формирующий новую действительность.»
+                    <br>— Эль Лисицкий
+                </div>
+            </div>
+        </div>
+
+        <!-- Stop 2: Lissitzky in Vitebsk -->
+        <div class="tour-stop" data-stop="2">
+            <div class="tour-stop-header">
+                <div class="stop-number">2</div>
+                <h2>Остановка 2: Эль Лисицкий в Витебске</h2>
+            </div>
+            <div class="tour-stop-content">
+                <div class="intro-card" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">
+                    <h3>Лазарь становится Элем</h3>
+                    <p>Эль (Лазарь) Лисицкий родился в 1890 году в местечке Почеп. В 1897 году семья переехала в Витебск — город, который станет важнейшей вехой в его творческой биографии.</p>
+                </div>
+                
+                <h3>Витебский период (1919-1924)</h3>
+                <p>После Октябрьской революции 1917 года Лисицкий вернулся в Витебск в 1919 году и стал одним из основателей Народного художественного училища — нового центра художественного образования.</p>
+                
+                <p>В это время Витебск стал настоящей Меккой авангарда. Здесь преподавали:</p>
+                <ul>
+                    <li><strong>Казимир Малевич</strong> — основатель супрематизма</li>
+                    <li><strong>Эль Лисицкий</strong> — будущий архитектор нового искусства</li>
+                    <li><strong>Марк Шагал</strong> — великий живописец</li>
+                </ul>
+                
+                <p>Лисицкий не только преподавал, но и создавал свои первые масштабные произведения. Именно в Витебске он разработал концепцию «прунов» (Proun — Проект утверждения нового) — экспериментальных работ, представляющих переход от плоскостной живописи к объёмно-пространственным конструкциям.</p>
+                
+                <h3>Народное художественное училище</h3>
+                <p>Училище стало лабораторией нового искусства. Здесь отказывались от классических методов обучения в пользу эксперимента. Студенты изучали не копирование природы, а создание новых форм.</p>
+                
+                <div class="proun-diagram">
+                    <h4>Прун — проект утверждения нового</h4>
+                    <p>Пруны — это не живопись и не архитектура. Это — пространственные конструкции на плоскости.</p>
+                    <div class="proun-visual">
+                        <div class="proun-shape red"></div>
+                        <div class="proun-shape blue"></div>
+                        <div class="proun-shape yellow"></div>
+                    </div>
+                    <p style="margin: 0; font-size: 0.9rem; opacity: 0.8;">Пересечение форм создаёт ощущение глубины и движения</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stop 3: Futurism -->
+        <div class="tour-stop" data-stop="3">
+            <div class="tour-stop-header">
+                <div class="stop-number">3</div>
+                <h2>Остановка 3: Футуризм</h2>
+            </div>
+            <div class="tour-stop-content">
+                <div class="intro-card" style="background: linear-gradient(135deg, #ff6b6b, #ff8e53);">
+                    <h3>Искусство скорости и движения</h3>
+                    <p>Футуризм зародился в Италии в 1909 году благодаря манифесту Филиппо Маринетти, опубликованному в парижской газете «Фигаро». Это было первое авангардное движение XX века.</p>
+                </div>
+                
+                <h3>Ключевые черты футуризма:</h3>
+                <ul>
+                    <li><strong>Культ скорости и движения</strong> — главная тема искусства</li>
+                    <li><strong>Технический прогресс</strong> — прославление машин, автомобилей, самолётов</li>
+                    <li><strong>Динамизм</strong> — передача движения и энергии</li>
+                    <li><strong>Отказ от прошлого</strong> — полный разрыв с традицией</li>
+                    <li><strong>Городская жизнь</strong> — образы современного мегаполиса</li>
+                    <li><strong>Агрессивная энергия</strong> — сила, мощь, напор</li>
+                </ul>
+                
+                <p>Футуристы верили, что мир движется вперёд с бешеной скоростью, и искусство должно отражать эту динамику. Они прославляли войну как «гигиену мира» и выступали против всего старого — от музеев до традиционной морали.</p>
+                
+                <h3>Ключевые работы:</h3>
+                <div class="artwork-showcase">
+                    <div class="artwork-card">
+                        <div class="artwork-image" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);">
+                            <span>⚡</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Карло Карра — «Похороны анархиста Галли»</h4>
+                            <p>Одна из самых известных работ итальянского футуризма. Картина передаёт хаотичное движение и драматизм политических столкновений. Динамичные линии создают ощущение беспорядка и насилия.</p>
+                        </div>
+                    </div>
+                    <div class="artwork-card">
+                        <div class="artwork-image" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
+                            <span>💃</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Джино Северини — «Танец Пана-Пан в «Монико»</h4>
+                            <p>Работа передаёт атмосферу ночного клуба и танцевального зала. Множественные линии движения создают эффект вибрации и калейдоскопа, типичный для футуристической эстетики.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p>Футуризм оказал огромное влияние на развитие авангарда. Идеи динамизма, скорости и технологического прогресса резонировали с творчеством Эля Лисицкого, который также стремился создать искусство, отражающее современность.</p>
+                
+                <div class="lissitzky-quote">
+                    «Искусство должно двигаться вперёд, как сама жизнь. Статика — это смерть.»
+                    <br>— Эль Лисицкий
+                </div>
+            </div>
+        </div>
+
+        <!-- Stop 4: Surrealism -->
+        <div class="tour-stop" data-stop="4">
+            <div class="tour-stop-header">
+                <div class="stop-number">4</div>
+                <h2>Остановка 4: Сюрреализм</h2>
+            </div>
+            <div class="tour-stop-content">
+                <div class="intro-card" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
+                    <h3>Мир снов и подсознания</h3>
+                    <p>Сюрреализм зародился в 1920-х годах во Франции как движение, исследующее бессознательное и мир снов. Основателем считается поэт Андре Бретон, опубликовавший в 1924 году «Манифест сюрреализма».</p>
+                </div>
+                
+                <h3>Что такое сюрреализм?</h3>
+                <p>Сюрреализм — это художественное движение, основанное на исследовании бессознательного, снов и иррационального. Сюрреалисты верили, что истинная реальность скрывается за пределами обычного восприятия.</p>
+                
+                <h3>Ключевые черты сюрреализма:</h3>
+                <ul>
+                    <li><strong>Бессознательное</strong> — искусство как выражение подсознания</li>
+                    <li><strong>Сны</strong> — образы из мира снов и грёз</li>
+                    <li><strong>Автоматизм</strong> — спонтанное творчество без контроля разума</li>
+                    <li><strong>Иррациональное</strong> — алогичные, абсурдные образы</li>
+                    <li><strong>Свободные ассоциации</strong> — неожиданные сочетания образов</li>
+                    <li><strong>Маргинальное</strong> — интерес к безумию, трансу, гипнозу</li>
+                </ul>
+                
+                <h3>Ключевые работы:</h3>
+                <div class="artwork-showcase">
+                    <div class="artwork-card">
+                        <div class="artwork-image" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                            <span>🌙</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Сальвадор Дали — «Таинственная вечеря»</h4>
+                            <p>Одна из самых известных работ Дали. На картине изображены апостолы за столом в фантастическом пейзаже. Фигура Христа в центре символизирует духовное начало среди хаоса материального мира.</p>
+                        </div>
+                    </div>
+                    <div class="artwork-card">
+                        <div class="artwork-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <span>💤</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Сальвадор Дали — «Сон»</h4>
+                            <p>Классическая сюрреалистическая работа с мягкими часами — символом текучести времени и подсознания. Фигура спящего человека олицетворяет бессознательное, а мягкие часы — отход от рационального восприятия времени.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p>Сюрреализм оказал огромное влияние на искусство XX века. Хотя Лисицкий работал в другом направлении (конструктивизм), его интерес к бессознательному и экспериментам с восприятием перекликается с сюрреалистическими идеями.</p>
+                
+                <div class="lissitzky-quote">
+                    «Искусство должно раскрывать скрытые связи между вещами — те, которые мы не видим в повседневной жизни.»
+                    <br>— Эль Лисицкий
+                </div>
+            </div>
+        </div>
+
+        <!-- Stop 5: Cubism -->
+        <div class="tour-stop" data-stop="5">
+            <div class="tour-stop-header">
+                <div class="stop-number">5</div>
+                <h2>Остановка 5: Кубизм</h2>
+            </div>
+            <div class="tour-stop-content">
+                <div class="intro-card" style="background: linear-gradient(135deg, #ff6b6b, #4ecdc4);">
+                    <h3>Революция перспективы и формы</h3>
+                    <p>Кубизм зародился в Париже в 1907 году благодаря работам Пабло Пикассо и Жоржа Брака. Это направление полностью изменило представление о том, как изображать реальность.</p>
+                </div>
+
+                <h3>Главная идея кубизма</h3>
+                <p>Кубизм отказался от традиционной перспективы и натуралистического изображения. Художники стремились показать предметы не такими, какими мы их видим, а такими, какими мы их знаем — разложенными на геометрические формы и видимыми одновременно с разных сторон.</p>
+
+                <h3>Что такое кубизм?</h3>
+                <p>Кубизм — это художественное направление, в котором предметы разлагаются на простые геометрические формы (кубы, цилиндры, сферы) и изображаются одновременно с нескольких точек зрения на одной плоскости.</p>
+
+                <h3>Ключевые черты кубизма:</h3>
+                <ul>
+                    <li><strong>Разложение форм</strong> — предметы разбираются на геометрические составляющие</li>
+                    <li><strong>Множественная перспектива</strong> — одновременное изображение объекта с разных сторон</li>
+                    <li><strong>Аналитический период</strong> (1907-1912) — монохромные работы, фокус на форме</li>
+                    <li><strong>Синтетический период</strong> (1912-1920) — введение цвета и коллажа</li>
+                    <li><strong>Влияние африканского искусства</strong> — упрощённые формы и маски</li>
+                    <li><strong>Отказ от иллюзии глубины</strong> — плоскостное изображение</li>
+                </ul>
+
+                <h3>Ключевые работы:</h3>
+                <div class="artwork-showcase">
+                    <div class="artwork-card">
+                        <div class="artwork-image" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                            <span>🎨</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Пабло Пикассо — «Женщина в берете и в клетчатом платье»</h4>
+                            <p>Работа аналитического периода кубизма (1905). Женская фигура разложена на геометрические формы, изображена одновременно спереди и сбоку. Цвета приглушены, акцент на форме и структуре.</p>
+                        </div>
+                    </div>
+                    <div class="artwork-card">
+                        <div class="artwork-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <span>⚔️</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Пабло Пикассо — «Герника»</h4>
+                            <p>Знаменитая работа 1937 года, созданная под впечатлением бомбардировки города Герника. Хотя формально относится к более позднему периоду, сохраняет кубистические принципы разложения форм и множественной перспективы.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p>Кубизм оказал огромное влияние на развитие современного искусства. Его идеи о разложении форм и множественной перспективе стали основой для многих направлений XX века, включая конструктивизм и абстрактное искусство.</p>
+
+                <div class="lissitzky-quote">
+                    «Кубизм научил нас видеть мир не глазами, а разумом. Форма — это не оболочка, а структура.»
+                    <br>— Эль Лисицкий
+                </div>
+            </div>
+        </div>
+
+        <!-- Stop 6: Constructivism -->
+        <div class="tour-stop" data-stop="6">
+            <div class="tour-stop-header">
+                <div class="stop-number">6</div>
+                <h2>Остановка 6: Конструктивизм</h2>
+            </div>
+            <div class="tour-stop-content">
+                <div class="intro-card" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+                    <h3>Искусство для новой жизни</h3>
+                    <p>Конструктивизм зародился в России в 1919-1920 годах как направление, связанное с Октябрьской революцией и строительством нового общества. Это направление стало основой советского авангарда.</p>
+                </div>
+
+                <h3>Главная идея конструктивизма</h3>
+                <p>Конструктивизм — это искусство, которое служит обществу и производству. Художники-конструктивисты верили, что искусство должно быть полезным, функциональным и способствовать строительству нового мира.</p>
+
+                <h3>Что такое конструктивизм?</h3>
+                <p>Конструктивизм — это художественное и архитектурное направление, которое подчёркивает функциональность, простоту форм и использование современных материалов. Искусство здесь — не самоцель, а инструмент для создания новой реальности.</p>
+
+                <h3>Ключевые черты конструктивизма:</h3>
+                <ul>
+                    <li><strong>Функциональность</strong> — искусство должно быть полезным и практичным</li>
+                    <li><strong>Простота форм</strong> — отказ от декоративности в пользу ясности</li>
+                    <li><strong>Современные материалы</strong> — металл, стекло, бетон вместо традиционных</li>
+                    <li><strong>Техническая эстетика</strong> — красота в конструкции и инженерных решениях</li>
+                    <li><strong>Социальная направленность</strong> — искусство для масс, не для элиты</li>
+                    <li><strong>Производственное искусство</strong> — дизайн предметов быта и промышленных изделий</li>
+                </ul>
+
+                <h3>Ключевые работы:</h3>
+                <div class="artwork-showcase">
+                    <div class="artwork-card">
+                        <div class="artwork-image" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                            <span>⚙️</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Казимир Малевич — «Внимательный рабочий»</h4>
+                            <p>Работа 1928 года, типичная для позднего периода конструктивизма. Изображает рабочего в индустриальной среде, подчёркивая тему труда и производства. Геометрические формы и динамика отражают идеи функциональности и технического прогресса.</p>
+                        </div>
+                    </div>
+                    <div class="artwork-card">
+                        <div class="artwork-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <span>🚀</span>
+                        </div>
+                        <div class="artwork-info">
+                            <h4>Эль Лисицкий — «Новый человек»</h4>
+                            <p>Одна из ключевых работ Лисицкого в конструктивистском стиле. Изображает идеального человека нового общества — сильного, динамичного, готового к строительству будущего. Композиция сочетает геометрические формы с элементами движения.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p>Конструктивизм стал основой для развития советского искусства и дизайна. Его принципы повлияли на архитектуру, промышленный дизайн и графику XX века. Эль Лисицкий был одним из ключевых фигур этого направления, соединяя конструктивизм с идеями супрематизма.</p>
+
+                <div class="lissitzky-quote">
+                    «Искусство — это не украшение жизни, а её организация. Конструктивизм — это искусство строить новую реальность.»
+                    <br>— Эль Лисицкий
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="tour-dots" id="tourDots"></div>
+        
+        <div class="tour-navigation">
+            <button class="tour-btn secondary" id="restartBtn" onclick="restartTour()">Начать сначала</button>
+            <button class="tour-btn" id="prevBtn2" onclick="prevStop()">← Назад</button>
+            <button class="tour-btn" id="nextBtn2" onclick="nextStop()">Вперёд →</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Авангард в искусстве. Образовательный проект.</p>
+    </footer>
+
+    <script>
+        const totalStops = 7;
+        let currentStop = 0;
+
+        function initTour() {
+            createDots();
+            updateTour();
+        }
+
+        function createDots() {
+            const dotsContainer = document.getElementById('tourDots');
+            for (let i = 0; i < totalStops; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'tour-dot' + (i === 0 ? ' active' : '');
+                dot.onclick = () => goToStop(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function updateTour() {
+            // Update stops visibility
+            document.querySelectorAll('.tour-stop').forEach((stop, index) => {
+                stop.classList.toggle('active', index === currentStop);
+            });
+
+            // Update dots
+            document.querySelectorAll('.tour-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentStop);
+            });
+
+            // Update progress bar
+            const progress = ((currentStop + 1) / totalStops) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentStop === 0;
+            document.getElementById('nextBtn').disabled = currentStop === totalStops - 1;
+            document.getElementById('prevBtn2').disabled = currentStop === 0;
+            document.getElementById('nextBtn2').disabled = currentStop === totalStops - 1;
+        }
+
+        function nextStop() {
+            if (currentStop < totalStops - 1) {
+                currentStop++;
+                updateTour();
+            }
+        }
+
+        function prevStop() {
+            if (currentStop > 0) {
+                currentStop--;
+                updateTour();
+            }
+        }
+
+        function goToStop(index) {
+            currentStop = index;
+            updateTour();
+        }
+
+        function restartTour() {
+            currentStop = 0;
+            updateTour();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextStop();
+            if (e.key === 'ArrowLeft') prevStop();
+        });
+
+        // Initialize on load
+        window.onload = initTour;
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

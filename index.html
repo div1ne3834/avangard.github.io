@@ -10,6 +10,11 @@
     <header>
         <nav>
             <div class="logo">Авангард: революция в искусстве и культуре</div>
+            <button class="menu-toggle" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul class="nav-menu">
                 <li><a href="#home">Главная</a></li>
                 <li>
@@ -44,6 +49,8 @@
                         <a href="expressionism.html">Экспрессионизм</a>
                     </div>
                 </li>
+                <li><a href="personalities.html">Личности</a></li>
+                <li><a href="tour.html">Экскурсия</a></li>
             </ul>
         </nav>
     </header>
@@ -112,6 +119,33 @@
             </div>
         </section>
 
+        <section id="personalities" class="personalities">
+            <h2>Личности авангарда</h2>
+            <div class="personalities-grid">
+                <a href="personalities.html#picasso" class="personality-card">
+                    <h3>Пабло Пикассо</h3>
+                    <p class="years">1881-1973</p>
+                    <p>Основатель кубизма, революционер живописи</p>
+                </a>
+                <a href="personalities.html#malevich" class="personality-card">
+                    <h3>Казимир Малевич</h3>
+                    <p class="years">1879-1935</p>
+                    <p>Создатель супрематизма, автор «Чёрного квадрата»</p>
+                </a>
+                <a href="personalities.html#kandinsky" class="personality-card">
+                    <h3>Василий Кандинский</h3>
+                    <p class="years">1866-1944</p>
+                    <p>Пионер абстрактного искусства</p>
+                </a>
+                <a href="personalities.html#duchamp" class="personality-card">
+                    <h3>Марсель Дюшан</h3>
+                    <p class="years">1887-1968</p>
+                    <p>Лидер дадаизма, создатель реди-мейда</p>
+                </a>
+            </div>
+            <a href="personalities.html" class="view-all-btn">Все личности →</a>
+        </section>
+
         <section id="movements" class="gallery">
             <h2>Течения</h2>
             <div class="gallery-grid">
@@ -177,6 +211,13 @@
         <p>&copy; 2025 Авангард в искусстве. Образовательный проект.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
