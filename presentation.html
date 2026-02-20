@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Презентация экскурсии - Авангард в искусстве</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .presentation-hero {
+            height: 50vh;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding-top: 80px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .presentation-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="none" stroke="white" stroke-width="0.5" x="10" y="10" width="30" height="30" transform="rotate(15 25 25)"/><rect fill="none" stroke="white" stroke-width="0.5" x="50" y="60" width="40" height="40" transform="rotate(-10 70 80)"/><circle fill="none" stroke="white" stroke-width="0.5" cx="70" cy="30" r="15"/><line x1="10" y1="80" x2="90" y2="20" stroke="white" stroke-width="0.3"/></svg>');
+            opacity: 0.15;
+            background-size: 200px 200px;
+        }
+
+        .presentation-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .presentation-hero p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 700px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .presentation-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .download-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .download-section h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .download-link {
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .download-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .download-link::before {
+            content: "📥 ";
+            font-size: 1.5rem;
+        }
+
+        .instructions {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .instructions p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #666;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .back-link:hover {
+            color: #ff6b6b;
+        }
+
+        @media (max-width: 768px) {
+            .presentation-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .presentation-hero p {
+                font-size: 1rem;
+            }
+            
+            .download-link {
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Авангард: революция в искусстве и культуре</div>
+            <button class="menu-toggle" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html">Главная</a></li>
+                <li>
+                    <a href="index.html#history">История</a>
+                    <div class="dropdown">
+                        <a href="1900-1910.html">1900-1910</a>
+                        <a href="1910-1920.html">1910-1920</a>
+                        <a href="1920-1930.html">1920-1930</a>
+                        <a href="1930-1950.html">1930-1950</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="index.html#directions">Направления</a>
+                    <div class="dropdown">
+                        <a href="architecture.html">Архитектура</a>
+                        <a href="art.html">Искусство</a>
+                        <a href="literature.html">Литература</a>
+                        <a href="music.html">Музыка</a>
+                    </div>
+                </li>
+                <li>
+                    <a href="index.html#movements">Течения</a>
+                    <div class="dropdown">
+                        <a href="fauvism.html">Фовизм</a>
+                        <a href="cubism.html">Кубизм</a>
+                        <a href="futurism.html">Футуризм</a>
+                        <a href="suprematism.html">Супрематизм</a>
+                        <a href="dadaism.html">Дадаизм</a>
+                        <a href="constructivism.html">Конструктивизм</a>
+                        <a href="surrealism.html">Сюрреализм</a>
+                        <a href="bauhaus.html">Баухаус</a>
+                        <a href="expressionism.html">Экспрессионизм</a>
+                    </div>
+                </li>
+                <li><a href="personalities.html">Личности</a></li>
+                <li>
+                    <a href="tour.html">Экскурсия</a>
+                    <div class="dropdown">
+                        <a href="presentation.html">Презентация</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="presentation-hero">
+        <h1>Презентация экскурсии</h1>
+        <p>Авангард в искусстве</p>
+    </section>
+
+    <main class="presentation-content">
+        <div class="download-section">
+            <h2>Скачать презентацию</h2>
+            <a href="presentation_files/Витебский_авангардный_лабиринт_Эля_Лисицкого.pptx" class="download-link" download>
+                Скачать презентацию
+            </a>
+            
+            <div class="instructions">
+                <h3>Инструкция:</h3>
+                <p>1. Скачайте файл презентации, нажав на кнопку выше.</p>
+                <p>2. Откройте скачанный файл в PowerPoint или другом приложении для просмотра презентаций.</p>
+                <p>3. Используйте презентацию для изучения материала об авангарде в искусстве.</p>
+            </div>
+
+            <a href="tour.html" class="back-link">← Вернуться к экскурсии</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Авангард в искусстве. Образовательный проект.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

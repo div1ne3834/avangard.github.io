@@ -178,8 +178,8 @@
         }
 
         .artwork-showcase {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            display: flex;
+            flex-direction: column;
             gap: 2rem;
             margin: 2rem 0;
         }
@@ -190,6 +190,7 @@
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
+            max-width: 100%;
         }
 
         .artwork-card:hover {
@@ -198,14 +199,20 @@
 
         .artwork-image {
             width: 100%;
-            height: 250px;
-            object-fit: cover;
+            height: 400px;
+            object-fit: contain;
             display: flex;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             font-size: 3rem;
+        }
+
+        .artwork-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
         .artwork-image.dada {
@@ -479,7 +486,12 @@
                     </div>
                 </li>
                 <li><a href="personalities.html">Личности</a></li>
-                <li><a href="tour.html" class="active">Экскурсия</a></li>
+                <li>
+                    <a href="tour.html" class="active">Экскурсия</a>
+                    <div class="dropdown">
+                        <a href="presentation.html">Презентация</a>
+                    </div>
+                </li>
             </ul>
         </nav>
     </header>
@@ -568,8 +580,8 @@
                 <h3>Ключевые работы:</h3>
                 <div class="artwork-showcase">
                     <div class="artwork-card">
-                        <div class="artwork-image dada">
-                            <span>✻</span>
+                        <div class="artwork-image">
+                            <img src="images/van-duesburg-poster.jpg" alt="Плакат Тео ван Дусбурга" onerror="this.style.display='none'">
                         </div>
                         <div class="artwork-info">
                             <h4>Тео ван Дусбург — Плакат</h4>
@@ -577,8 +589,8 @@
                         </div>
                     </div>
                     <div class="artwork-card">
-                        <div class="artwork-image dada">
-                            <span>◇</span>
+                        <div class="artwork-image">
+                            <img src="images/arp-collage.jpg" alt="Коллаж Жана Арпа" onerror="this.style.display='none'">
                         </div>
                         <div class="artwork-info">
                             <h4>Жан Арп — Коллаж по законам случая</h4>
@@ -663,8 +675,8 @@
                 <h3>Ключевые работы:</h3>
                 <div class="artwork-showcase">
                     <div class="artwork-card">
-                        <div class="artwork-image" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);">
-                            <span>⚡</span>
+                        <div class="artwork-image">
+                            <img src="images/carra-funeral.jpg" alt="Карло Карра «Похороны анархиста Галли»" onerror="this.style.display='none'">
                         </div>
                         <div class="artwork-info">
                             <h4>Карло Карра — «Похороны анархиста Галли»</h4>
@@ -672,8 +684,8 @@
                         </div>
                     </div>
                     <div class="artwork-card">
-                        <div class="artwork-image" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">
-                            <span>💃</span>
+                        <div class="artwork-image">
+                            <img src="images/severini-dance.jpg" alt="Джино Северини «Танец Пана-Пан»" onerror="this.style.display='none'">
                         </div>
                         <div class="artwork-info">
                             <h4>Джино Северини — «Танец Пана-Пан в «Монико»</h4>
